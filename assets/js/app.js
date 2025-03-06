@@ -19,14 +19,13 @@ function clearInputs () {
     minutesInput.value = '';
 }
 
-setInterval (function setTime () {
+setInterval ( function setTime () {
     const time = new Date();
     let hour = time.getHours().toString().padStart(2, '0');
     let minute = time.getMinutes().toString().padStart(2, '0');
+    liveTime.textContent = `${hour}:${minute}`;
 
-  liveTime.textContent = `${hour}:${minute}`;
-
-   if (alarmSet && time.getTime() >= alarmDateTime) {
+    if (alarmSet && time.getTime() >= alarmDateTime) {
         alarmMusic.play();
         liveTime.classList.add('alarm-color');
         alarmSet = false;
@@ -34,20 +33,18 @@ setInterval (function setTime () {
 
 }, 1000);
 
-setTimeout(() => {
-    liveTime.classList.remove('alarm-color');
-}, 2000);
-
 function validateInputs () {
     let hourValue = parseInt(hourInput.value, 10);
     let minuteValue = parseInt(minutesInput.value, 10);
-    
-    if(hourValue < 0 || hourValue > 23) {
-        hourInput.value = '';
+
+    if( hourValue < 0 || hourValue > 23) {
+        return false;
     }
-    if(minuteValue < 0 || minuteValue > 59) {
-        minutesInput.value = '';
+    if( minuteValue < 0 || minuteValue > 59) {
+        return false;
     }
+
+    return true;
 }
 
 inputs.forEach((input) => {
@@ -57,12 +54,7 @@ inputs.forEach((input) => {
     });
 });  
 
-
-setAlarmButton.addEventListener('click', () => {
-    validateInputs();
-    let hourValue = hourInput.value.padStart(2, '0');
-    let minuteValue = minutesInput.value.padStart(2, '0');
-
+function setAlarmTime (hourValue, minuteValue) {
     let now = new Date();
     let alarmTimeObj = new Date();
     alarmTimeObj.setHours(parseInt(hourValue, 10), parseInt(minuteValue, 10), 0, 0);
@@ -71,7 +63,19 @@ setAlarmButton.addEventListener('click', () => {
         alarmTimeObj.setDate(alarmTimeObj.getDate() + 1);
     }
 
-    alarmDateTime = alarmTimeObj.getTime();
+    return alarmTimeObj.getTime();
+}
+
+
+setAlarmButton.addEventListener('click', () => {
+    if(!validateInputs()) {
+        return;
+    }
+
+    let hourValue = hourInput.value.padStart(2, '0');
+    let minuteValue = minutesInput.value.padStart(2, '0');
+
+    alarmDateTime = setAlarmTime (hourValue, minuteValue);
     alarmTime.textContent = `${hourValue}:${minuteValue}`;
     alarmSet = true;
 
