@@ -1,9 +1,9 @@
 'use strict';
-const {log} = console;
+
 const liveTime = document.querySelector('section h1');
-const alarmTime = document.querySelector('.alarm-set p')
-const setAlarmButton = document.querySelector('.submit-button')
-const inputs = document.querySelectorAll('.time')
+const alarmTime = document.querySelector('.alarm-set p');
+const setAlarmButton = document.querySelector('.submit-button');
+const inputs = document.querySelectorAll('.time');
 const hourInput = document.querySelector('.hour');
 const minutesInput = document.querySelector('.minutes');
 const alarmMusic = new Audio('./assets/media/alarm.mp3');
@@ -28,9 +28,15 @@ setInterval (function setTime () {
 
    if (alarmSet && time.getTime() >= alarmDateTime) {
         alarmMusic.play();
+        liveTime.classList.add('alarm-color');
         alarmSet = false;
     }
+
 }, 1000);
+
+setTimeout(() => {
+    liveTime.classList.remove('alarm-color');
+}, 2000);
 
 function validateInputs () {
     let hourValue = parseInt(hourInput.value, 10);
@@ -56,8 +62,6 @@ setAlarmButton.addEventListener('click', () => {
     validateInputs();
     let hourValue = hourInput.value.padStart(2, '0');
     let minuteValue = minutesInput.value.padStart(2, '0');
-
-    alarmTime.textContent = `${hourValue}:${minuteValue}`;
 
     let now = new Date();
     let alarmTimeObj = new Date();

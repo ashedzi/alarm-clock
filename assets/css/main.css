@@ -34,6 +34,11 @@ h1 {
     font-weight: 800;
     line-height: 1;
     margin-bottom: 16px;
+    color: #000;
+}
+
+.alarm-color{
+    color: #64761c;
 }
 
 section {
